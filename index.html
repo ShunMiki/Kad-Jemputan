@@ -201,6 +201,9 @@
                 <a href="https://maps.app.goo.gl/jQzb58e4LNuaPx9L8" target="_blank">
                     <i class="fas fa-map-marker-alt"></i>
                 </a>
+                <a href="https://waze.com/ul?q=No.+3%2C+Jalan+Prima+2%2F4%2C+Taman+Puchong+Prima%2C+47150+Puchong%2C+Selangor" target="_blank">
+                    <i class="fab fa-waze"></i>
+                </a>
                 <a href="https://wa.me/60127249151" target="_blank">
                     <i class="fab fa-whatsapp"></i>
                 </a>
@@ -237,13 +240,13 @@
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
                 countdownElement.innerHTML = `
-                    ${days} hari ${hours} jam ${minutes} minit ${seconds} saat lagi!
+                    <strong>${days} Hari</strong> ${hours} Jam ${minutes} Minit ${seconds} Saat
                 `;
 
-                // If the countdown is finished, write some text
+                // If the countdown is over, write some text
                 if (distance < 0) {
                     clearInterval();
-                    countdownElement.innerHTML = "Kenduri sedang berlangsung!";
+                    countdownElement.innerHTML = "Kenduri telah berlangsung!";
                 }
             }, 1000);
         }
