@@ -25,6 +25,51 @@
             overflow: hidden; /* Prevent scrolling until clicked */
         }
 
+        /* Glitter animation container */
+        .glitter-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 999; /* Ensure it appears on top */
+            overflow: hidden;
+        }
+
+        /* Glitter particles */
+        .glitter {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: rgba(255, 215, 0, 0.8); /* Gold color */
+            border-radius: 50%;
+            opacity: 0;
+            animation: fall 5s linear infinite, shimmer 1.5s infinite;
+        }
+
+        /* Glitter falling animation */
+        @keyframes fall {
+            0% {
+                top: -5%;
+                opacity: 1;
+            }
+            100% {
+                top: 110%;
+                opacity: 0;
+            }
+        }
+
+        /* Glitter shimmering effect */
+        @keyframes shimmer {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.5);
+            }
+        }
+
         .title-container {
             display: flex;
             flex-direction: column;
@@ -173,6 +218,8 @@
     </style>
 </head>
 <body>
+    <div class="glitter-container" id="glitterContainer"></div> <!-- Glitter animation container -->
+    
     <div class="title-container" onclick="showInvitation()">
         <h1>Majlis Jamuan Makan</h1>
         <p>Ahad 24.11.24</p>
@@ -214,40 +261,50 @@
 
     <script>
         function showInvitation() {
-            document.querySelector('.title-container').style.display = 'none';
-            const invitationCard = document.getElementById('invitationCard');
-            invitationCard.style.display = 'block';
-
-            // Trigger the animation
-            setTimeout(() => {
-                invitationCard.classList.add('open'); // Add open class to start animation
-            }, 10); // Short delay to ensure the element is displayed before the animation
-
-            startCountdown();
+            var invitationCard = document.getElementById("invitationCard");
+            invitationCard.style.display = "block";
+            setTimeout(function () {
+                invitationCard.classList.add("open");
+            }, 10); // Delay for smooth animation
         }
 
-        function startCountdown() {
-            const eventDate = new Date("2024-11-24T12:00:00Z"); // Set event date and time
-            const countdownElement = document.getElementById('countdown');
+        // Glitter falling animation
+        function createGlitter() {
+            var glitterContainer = document.getElementById("glitterContainer");
+            for (var i = 0; i < 100; i++) {
+                var glitter = document.createElement("div");
+                glitter.classList.add("glitter");
+                glitter.style.left = Math.random() * 100 + "vw"; // Random horizontal position
+                glitter.style.animationDelay = Math.random() * 5 + "s"; // Random delay
+                glitter.style.animationDuration = 3 + Math.random() * 5 + "s"; // Random fall speed
+                glitterContainer.appendChild(glitter);
+            }
+        }
 
-            setInterval(() => {
-                const now = new Date().getTime();
-                const distance = eventDate - now;
+        createGlitter();
 
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Countdown Timer Script
+        var countdownElement = document.getElementById("countdown");
+        var eventDate = new Date("November 24, 2024 12:00:00").getTime();
+
+        if (countdownElement) {
+            var interval = setInterval(function () {
+                var now = new Date().getTime();
+                var distance = eventDate - now;
+
+                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
                 countdownElement.innerHTML = `
-                <strong>Menghitung Hari:</strong><br>
-                    <strong>${days} Hari</strong> ${hours} Jam ${minutes} Minit ${seconds} Saat
+                    <strong>Countdown to the Event:</strong><br>
+                    ${days} Hari ${hours} Jam ${minutes} Minit ${seconds} Saat
                 `;
 
-                // If the countdown is over, write some text
                 if (distance < 0) {
                     clearInterval();
-                    countdownElement.innerHTML = "Kenduri telah berlangsung!";
+                    countdownElement.innerHTML = "The event has started!";
                 }
             }, 1000);
         }
